@@ -1,0 +1,173 @@
+{
+    /*
+    * Copyright (c) 2025, Oracle and/or its affiliates. All rights reserved.
+    */
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Applet",
+            "type": "shell",
+            "icon": {
+                "id": "wrench",
+                "color": "terminal.ansiYellow"
+            },
+            "command": "${JAVA_HOME}/bin/javac -d ${workspaceFolder}/bin -g --release 10 -cp .:${JC_HOME_TOOLS}/lib/api_classic-3.2.0.jar:${JC_HOME_TOOLS}/lib/tools.jar:${JC_HOME_TOOLS}/lib/api_classic_annotations-3.2.0.jar $(find \"${workspaceFolder}/src\" -name \"*.java\")",
+            "windows": {
+                "command": "$classpath = '.;${env:JC_HOME_TOOLS}\\lib\\api_classic-3.2.0.jar;${env:JC_HOME_TOOLS}}\\lib\\tools.jar;${env:JC_HOME_TOOLS}\\lib\\api_classic_annotations-3.2.0.jar'; $sourceFiles = (Get-ChildItem -Path \"${workspaceFolder}\\src\" -Recurse -Filter '*.java').FullName; javac -d \"${workspaceFolder}\\bin\" -g --release 10 -cp $classpath $sourceFiles"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never",
+                "close": true,
+                "focus": false,
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "Convert and Verify Applet",
+            "type": "shell",
+            "icon": {
+                "id": "chip",
+                "color": "terminal.ansiYellow"
+            },
+            "command": "cd ${workspaceFolder}/src && package_list=\"${package_list:-*}\" && shopt -s nullglob; IFS=' '; read -r -a file_list <<< \"$package_list\" && for i in \"${file_list[@]}\"; do ${JC_HOME_TOOLS}/bin/converter.sh -config $(find \"../configurations\" -name \"${i}.conf\"); done",
+            "windows": {
+                "command": "Set-Location \"${workspaceFolder}\\src\"; $package_list = if ([string]::IsNullOrEmpty($Env:package_list)) { '*' } else { $Env:package_list }; $items = $package_list -split ' '; foreach ($i in $items) { $label = $i + '.conf'; $conf_file = (Get-ChildItem \"..\\configurations\" -Recurse -Filter $label).FullName; & \"${env:JC_HOME_TOOLS}\\bin\\converter.bat\" -config $conf_file};",
+            },
+            "problemMatcher": [],
+            "dependsOn": ["Build Applet"],
+            "presentation": {
+                "reveal": "always",
+                "close": false,
+                "focus": true,
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "Launch Java Card Debug Proxy Task",
+            "icon": {
+                "color": "terminal.ansiMagenta",
+                "id": "plug"
+            },
+            "type": "shell",
+            "command": "${JAVA_HOME}/bin/java -jar ${JC_HOME_SIMULATOR}/client/DebugProxy/jc-debug-proxy.jar -capPath $(find \"./deliverables\" -name \"*.cap\" | tr '\n' ':') -debug-info \"${JC_HOME_SIMULATOR}/client/DebugProxy/debug-info\" -vmPort 8008 -port 8000",
+            "windows": {
+                "command": "$CapFile = (Get-ChildItem -Path \"./deliverables\" -Recurse -Filter '*.cap' | ForEach-Object { $_.FullName }) -join ';' ; Set-Location ${Env:JAVA_HOME}\\bin; java -jar ${Env:JC_HOME_SIMULATOR}\\client\\DebugProxy\\jc-debug-proxy.jar -capPath $CapFile -debug-info \"${Env:JC_HOME_SIMULATOR}\\client\\DebugProxy\\debug-info\" -vmPort 8008 -port 8000"
+            },
+            "problemMatcher": [
+                {
+                    "owner": "java-proxy",
+                    "severity": "info",
+                    "pattern": [
+                        {
+                            "regexp": "^(INFO|ERROR|WARNING):\\s+(.*)$",
+                            "file": 2,
+                            "location": 1,
+                            "severity": 1,
+                            "message": 2
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".*handshake to VM\\d+$",
+                        "endsPattern": ".*waiting for IDE on open server socket on port: \\d+$",
+                    },
+                },
+            ],
+            "dependsOn": [
+                "Wait for Port 8008"
+            ],
+            "isBackground": true,
+            "presentation": {
+                "close": true,
+                "focus": false,
+                "panel": "dedicated",
+            },
+        },
+        {
+            "label": "Wait for Port 8008",
+            "icon": {
+                "id": "sync",
+                "color": "terminal.ansiBlue"
+            },
+            "type": "shell",
+            "command": "sleep 2 && while ! nc -z 127.0.0.1 8008; do sleep 1; done",
+            "problemMatcher": [],
+            "windows": {
+                "command": "while (-not (Test-NetConnection -ComputerName 127.0.0.1 -Port 8008 -InformationLevel Quiet)) { Start-Sleep -Seconds 1 }"
+            },
+            "presentation": {
+                "reveal": "never",
+                "close": true,
+                "focus": false,
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "Start Java Card Simultor Debug Mode",
+            "icon": {
+                "color": "terminal.ansiGreen",
+                "id": "remote-explorer"
+            },
+            "type": "shell",
+            "command": "${JC_HOME_SIMULATOR}/runtime/bin/jcsl -debug_port=8008",
+            "windows": {
+                "command": "Set-Location ${Env:JC_HOME_SIMULATOR}\\runtime\\bin; .\\jcsw.exe -debug_port=8008"
+            },
+            "problemMatcher": [
+                {
+                    "owner": "javacard-simulator",
+                    "severity": "info",
+                    "pattern": [
+                        {
+                            "regexp": "^(INFO|ERROR|WARNING|CONFIG):\\s+(.*)$",
+                            "file": 2,
+                            "location": 1,
+                            "severity": 1,
+                            "message": 2
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".*set log level to\\d+$",
+                        "endsPattern": ".*server ready on port #\\d+$",
+                    },
+                }
+            ],
+            "runOptions": {
+                "instanceLimit": 1,
+                "reevaluateOnRerun": true
+            },
+            "isBackground": true,
+            "presentation": {
+                "close": true,
+                "focus": false,
+                "panel": "dedicated",
+            },
+        },
+        {
+            "label": "PreTask Debug",
+            "dependsOn": [
+                "Start Java Card Simultor Debug Mode",
+                "Launch Java Card Debug Proxy Task"
+            ],
+            "runOptions": {
+                "runOn": "default",
+            }
+        },
+        {
+            "label": "Terminate All Tasks",
+            "command": "echo ${input:terminate}",
+            "type": "shell",
+            "problemMatcher": [],
+        }
+    ],
+    "inputs": [
+        {
+            "id": "terminate",
+            "type": "command",
+            "command": "workbench.action.tasks.terminate",
+            "args": "terminateAll"
+        }
+    ]
+}

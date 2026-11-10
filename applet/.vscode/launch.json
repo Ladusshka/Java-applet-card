@@ -1,0 +1,37 @@
+{
+    /*
+    * Copyright (c) 2025, Oracle and/or its affiliates. All rights reserved.
+    */
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Convert and Verify Applet",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "exit",
+            "windows": {
+                "command": "exit",
+            },
+            "preLaunchTask": "Convert and Verify Applet",
+            "suppressMultipleSessionWarning": true,
+        },
+        {
+            "command": "${JC_HOME_SIMULATOR}/runtime/bin/jcsl",
+            "windows": {
+                "command": "Set-Location ${Env:JC_HOME_SIMULATOR}\\runtime\\bin; .\\jcsw.exe",
+            },
+            "name": "Start Java Card Simulator",
+            "request": "launch",
+            "type": "node-terminal",
+        },
+        {
+            "name": "Start Java Card Simulator Debug Mode",
+            "type": "jdk",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": "8000",
+            "preLaunchTask": "PreTask Debug",
+            "postDebugTask": "Terminate All Tasks",
+        }
+    ],
+}

@@ -1,0 +1,23 @@
+{
+    /*
+    * Copyright (c) 2025, Oracle and/or its affiliates. All rights reserved.
+    */
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Wait for Port 9025",
+            "type": "shell",
+            "command": "while ! nc -z 127.0.0.1 9025; do sleep 1; done",
+            "problemMatcher": [],
+            "windows": {
+                "command": "while (-not (Test-NetConnection -ComputerName localhost -Port 9025 -InformationLevel Quiet)) { Start-Sleep -Seconds 1 }"
+            },
+            "presentation": {
+                "reveal": "never",
+                "close": true,
+                "focus": false,
+                "panel": "dedicated"
+            }
+        }
+    ]
+}

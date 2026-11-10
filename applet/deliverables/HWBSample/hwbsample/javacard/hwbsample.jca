@@ -1,0 +1,265 @@
+// converted by version  [v25.0]
+// on Sun Oct 12 15:53:38 CEST 2025
+
+.package hwbsample {
+	.aid 0x11:0x22:0x33:0x44:0x55:0x0;
+	.version 1.0;
+
+	.imports {
+		0xA0:0x0:0x0:0x0:0x62:0x1:0x1 1.9;		//javacard/framework
+		0xA0:0x0:0x0:0x0:0x62:0x0:0x1 1.0;		//java/lang
+	}
+
+	.applet {
+		0x11:0x22:0x33:0x44:0x55:0x0:0x1 HWBSample;
+	}
+
+	.constantPool {
+		// 0
+		staticMethodRef HWBSample/<init>([BSB)V;
+		// 1
+		.classRef HWBSample;
+		// 2
+		staticMethodRef 0.3.0()V;		// javacard/framework/Applet.<init>()V
+		// 3
+		virtualMethodRef 0.3.2([BSB)V;		// register([BSB)V
+		// 4
+		staticFieldRef short HWBSample/MAXbytes;
+		// 5
+		staticFieldRef byte[] HWBSample/BytesReceieved;
+		// 6
+		virtualMethodRef 0.3.3()Z;		// selectingApplet()Z
+		// 7
+		staticMethodRef 0.7.1(S)V;		// javacard/framework/ISOException.throwIt(S)V
+		// 8
+		virtualMethodRef 0.10.1()[B;		// getBuffer()[B
+		// 9
+		staticMethodRef HWBSample/NameHandler(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 10
+		staticMethodRef HWBSample/ReceiveBytes(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 11
+		staticMethodRef HWBSample/SendBytes(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 12
+		virtualMethodRef 0.10.7()S;		// setOutgoing()S
+		// 13
+		staticFieldRef byte[] HWBSample/NAME;
+		// 14
+		virtualMethodRef 0.10.9(S)V;		// setOutgoingLength(S)V
+		// 15
+		virtualMethodRef 0.10.5([BSS)V;		// sendBytesLong([BSS)V
+		// 16
+		virtualMethodRef 0.10.6()S;		// setIncomingAndReceive()S
+		// 17
+		staticMethodRef 0.16.1([BS[BSS)S;		// javacard/framework/Util.arrayCopy([BS[BSS)S
+		// 18
+		staticFieldRef short HWBSample/LastBytesTaken;
+	}
+
+	.class public HWBSample 0 extends 0.3 {		// extends javacard/framework/Applet
+
+		.fields {
+			public static byte[] NAME 0 = {66,79,66,82};		// [B
+			public static short LastBytesTaken 1;		// S
+			public static short MAXbytes 2 = 20;		// S
+			public static byte[] BytesReceieved 3;		// [B
+		}
+
+		.publicMethodTable 7 8 {
+			equals(Ljava/lang/Object;)Z 0;
+			register()V 1;
+			register([BSB)V 2;
+			selectingApplet()Z 3;
+			deselect()V 4;
+			getShareableInterfaceObject(Ljavacard/framework/AID;B)Ljavacard/framework/Shareable; 5;
+			select()Z 6;
+			process(Ljavacard/framework/APDU;)V 7;
+		}
+
+		.packageMethodTable 0 {
+		}
+
+		.method public static install([BSB)V 0 {
+			.stack 5;
+			.locals 0;
+
+				L0:	new 1;		// hwbsample/HWBSample
+					dup;
+					aload_0;
+					sload_1;
+					sload_2;
+					invokespecial 0;		// hwbsample/HWBSample.<init>([BSB)V
+					pop;
+					return;
+		}
+
+		.method protected <init>([BSB)V 1 {
+			.stack 5;
+			.locals 0;
+
+				L0:	aload_0;
+					invokespecial 2;		// javacard/framework/Applet.<init>()V
+					aload_0;
+					aload_1;
+					sload_2;
+					sconst_1;
+					sadd;
+					aload_1;
+					sload_2;
+					baload;
+					invokevirtual 3;		// register([BSB)V
+					getstatic_s 4;		// short hwbsample/HWBSample.MAXbytes
+					newarray 11;
+					putstatic_a 5;		// reference hwbsample/HWBSample.BytesReceieved
+					return;
+		}
+
+		.method public process(Ljavacard/framework/APDU;)V 7 {
+			.stack 2;
+			.locals 3;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_0;
+					invokevirtual 6;		// selectingApplet()Z
+					ifeq L2;
+				L1:	sspush -28672;
+					invokestatic 7;		// javacard/framework/ISOException.throwIt(S)V
+				L2:	aload_1;
+					invokevirtual 8;		// getBuffer()[B
+					astore_2;
+				L3:	aload_2;
+					sconst_0;
+					baload;
+					sstore_3;
+				L4:	sload_3;
+					bspush -128;
+					if_scmpeq L6;
+				L5:	sspush 28160;
+					invokestatic 7;		// javacard/framework/ISOException.throwIt(S)V
+				L6:	aload_2;
+					sconst_1;
+					baload;
+					sstore 4;
+				L7:	sload 4;
+					stableswitch L11 0 4 L8 L11 L9 L11 L10;
+				L8:	aload_0;
+					aload_1;
+					invokespecial 9;		// hwbsample/HWBSample.NameHandler(Ljavacard/framework/APDU;)V
+					goto L12;
+				L9:	aload_0;
+					aload_1;
+					invokespecial 10;		// hwbsample/HWBSample.ReceiveBytes(Ljavacard/framework/APDU;)V
+					goto L12;
+				L10:	aload_0;
+					aload_1;
+					invokespecial 11;		// hwbsample/HWBSample.SendBytes(Ljavacard/framework/APDU;)V
+					goto L12;
+				L11:	sspush 27904;
+					invokestatic 7;		// javacard/framework/ISOException.throwIt(S)V
+				L12:	aload_0;
+					invokevirtual 6;		// selectingApplet()Z
+					ifeq L14;
+				L13:	sspush -28672;
+					invokestatic 7;		// javacard/framework/ISOException.throwIt(S)V
+				L14:	return;
+		}
+
+		.method private NameHandler(Ljavacard/framework/APDU;)V {
+			.stack 4;
+			.locals 1;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_1;
+					invokevirtual 12;		// setOutgoing()S
+					sstore_2;
+				L1:	sload_2;
+					getstatic_a 13;		// reference hwbsample/HWBSample.NAME
+					arraylength;
+					if_scmple L3;
+				L2:	getstatic_a 13;		// reference hwbsample/HWBSample.NAME
+					arraylength;
+					sstore_2;
+				L3:	aload_1;
+					sload_2;
+					invokevirtual 14;		// setOutgoingLength(S)V
+					aload_1;
+					getstatic_a 13;		// reference hwbsample/HWBSample.NAME
+					sconst_0;
+					sload_2;
+					invokevirtual 15;		// sendBytesLong([BSS)V
+					return;
+		}
+
+		.method private ReceiveBytes(Ljavacard/framework/APDU;)V {
+			.stack 5;
+			.locals 2;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_1;
+					invokevirtual 8;		// getBuffer()[B
+					astore_2;
+				L1:	sconst_0;
+					sstore_3;
+				L2:	aload_1;
+					invokevirtual 16;		// setIncomingAndReceive()S
+					sstore_3;
+					sload_3;
+					getstatic_s 4;		// short hwbsample/HWBSample.MAXbytes
+					if_scmple L4;
+				L3:	sspush 26368;
+					invokestatic 7;		// javacard/framework/ISOException.throwIt(S)V
+				L4:	aload_2;
+					sconst_5;
+					getstatic_a 5;		// reference hwbsample/HWBSample.BytesReceieved
+					sconst_0;
+					sload_3;
+					invokestatic 17;		// javacard/framework/Util.arrayCopy([BS[BSS)S
+					pop;
+					sload_3;
+					putstatic_s 18;		// short hwbsample/HWBSample.LastBytesTaken
+					return;
+		}
+
+		.method private SendBytes(Ljavacard/framework/APDU;)V {
+			.stack 4;
+			.locals 3;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_1;
+					invokevirtual 8;		// getBuffer()[B
+					astore_2;
+				L1:	aload_1;
+					invokevirtual 12;		// setOutgoing()S
+					sstore_3;
+				L2:	sload_3;
+					getstatic_s 18;		// short hwbsample/HWBSample.LastBytesTaken
+					if_scmpeq L5;
+				L3:	sspush 27648;
+					getstatic_s 18;		// short hwbsample/HWBSample.LastBytesTaken
+					sadd;
+					sstore 4;
+				L4:	sload 4;
+					invokestatic 7;		// javacard/framework/ISOException.throwIt(S)V
+				L5:	aload_1;
+					sload_3;
+					invokevirtual 14;		// setOutgoingLength(S)V
+					aload_1;
+					getstatic_a 5;		// reference hwbsample/HWBSample.BytesReceieved
+					sconst_0;
+					sload_3;
+					invokevirtual 15;		// sendBytesLong([BSS)V
+					return;
+		}
+
+	}
+
+}

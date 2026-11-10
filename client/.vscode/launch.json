@@ -1,0 +1,37 @@
+{
+    /*
+    * Copyright (c) 2025, Oracle and/or its affiliates. All rights reserved.
+    */
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "jdk",
+            "request": "launch",
+            "mainClass": "${workspaceFolder}/src/hwbsampleclient/HWBClientAPDUs.java",
+            "args": "-cap=${workspaceFolder}/../applet/deliverables/HWBSample/hwbsample/javacard/hwbsample.cap -props=${env:JC_HOME_SIMULATOR}/samples/client.config.properties",
+            "vmArgs": "-Djava.library.path=${env:JC_HOME_SIMULATOR}/runtime/bin --module-path ${env:JC_HOME_SIMULATOR}/client/AMService:${env:JC_HOME_SIMULATOR}/client/COMService --add-modules ALL-MODULE-PATH",
+            "windows": {
+                "mainClass": "${workspaceFolder}\\src\\hwbsampleclient\\HWBClientAPDUs.java",
+                "args": "-cap=${workspaceFolder}\\..\\applet\\deliverables\\HWBSample\\hwbsample\\javacard\\hwbsample.cap -props=\"${env:JC_HOME_SIMULATOR}\\samples\\client.config.properties\"",
+                "vmArgs": "-Djava.library.path=\"${env:JC_HOME_SIMULATOR}\\runtime\\bin\" --module-path \"${env:JC_HOME_SIMULATOR}\\client\\AMService;${env:JC_HOME_SIMULATOR}\\client\\COMService\" --add-modules ALL-MODULE-PATH",
+            },
+            "name": "Run Java Card Client Simulation",
+            "preLaunchTask": "Wait for Port 9025",
+            "console": "internalConsole",
+        },
+        {
+            "type": "jdk",
+            "request": "launch",
+            "mainClass": "${workspaceFolder}/src/hwbsampleclient/HWBClientAPDUs.java",
+            "args": "-physical",
+            "vmArgs": "-Djava.library.path=${env:JC_HOME_SIMULATOR}/runtime/bin --module-path ${env:JC_HOME_SIMULATOR}/client/AMService:${env:JC_HOME_SIMULATOR}/client/COMService --add-modules ALL-MODULE-PATH",
+            "windows": {
+                "mainClass": "${workspaceFolder}\\src\\hwbsampleclient\\HWBClientAPDUs.java",
+                "args": "-physical",
+                "vmArgs": "-Djava.library.path=\"${env:JC_HOME_SIMULATOR}\\runtime\\bin\" --module-path \"${env:JC_HOME_SIMULATOR}\\client\\AMService;${env:JC_HOME_SIMULATOR}\\client\\COMService\" --add-modules ALL-MODULE-PATH",
+            },
+            "name": "Run Java Card Client Physical Card",
+            "console": "internalConsole",
+        },
+    ],
+}
